@@ -3,10 +3,12 @@ import { dispatch } from "./store";
 import { addInfo } from "./store/actions";
 import { CardAttributes } from "./components/card/card";
 import "./components"
+import { getFromDatabase, addToDataBase } from "./utils/firebase";
 
 class AppContainer extends HTMLElement{
 
 taskData?: any[] = appState.array;
+
 
 constructor(){
     super();
@@ -14,8 +16,26 @@ constructor(){
     addObserver(this);
 }
 
+databaseRetrieve(){
+    const databaseRetrieve = async () => {
+        try{
+            const database = await getFromDatabase();
+            console.log(database);
+            return database
+            
+        }
+        catch{console.log("mamaguevo")}
+    }
+    
+    databaseRetrieve();
+}
+
+updateAppState(){
+    const dataArray = this.databaseRetrieve()
+}
+
 connectedCallback(){
-    this.render()
+    this.render();
     console.log(appState)
 }
 
@@ -30,7 +50,7 @@ async addInfo() {
     console.log('Description:', description);
  
     if (title && description) {
-       dispatch(addInfo(title, description));
+       dispatch(addToDataBase(title, description));
     } else {
        console.error('Title and description must be defined.');
     }

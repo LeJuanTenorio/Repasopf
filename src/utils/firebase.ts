@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, QuerySnapshot } from "firebase/firestore";
 
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyBM7MOyoSUmSkRCHOFqk5tVGCGtHjKHPqk",
   authDomain: "sphere-3b8a9.firebaseapp.com",
@@ -29,7 +27,23 @@ export const addToDataBase = async (titleVariable: string, descriptionVariable: 
     }
 }
 
+export const getFromDatabase = async () => {
+    try {
+        const where = collection(db, "tasks");
+        const querySnapshot = await getDocs(where);
+
+        const data = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+        }));
+
+        return data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
 export default {
-
-
+addToDataBase,
+getFromDatabase,
 }
