@@ -8,10 +8,10 @@ export const reducer = (currentAction: Actions, currentState: AppState): AppStat
     case infoActions.ADDINFO:
       return {
         ...currentState,
-        array: [...currentState.array, payload],
+        array: payload,
       };
     default:
-      // Always include a default case that returns the current state
+
       return currentState;
   }
 };

@@ -10,10 +10,7 @@ export enum infoActions {
 
 export interface AddInfoAction {
 	action: infoActions.ADDINFO
-	payload: {
-        title: string;
-        description: string;
-      };
+	payload: any[]
 }
 
 export type Actions = AddInfoAction

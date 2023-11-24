@@ -7,31 +7,45 @@ import { getFromDatabase, addToDataBase } from "./utils/firebase";
 
 class AppContainer extends HTMLElement{
 
-taskData?: any[] = appState.array;
-
-
 constructor(){
     super();
     this.attachShadow({mode:"open"})
     addObserver(this);
 }
 
-databaseRetrieve(){
+async updateAppState(){
+
     const databaseRetrieve = async () => {
         try{
             const database = await getFromDatabase();
-            console.log(database);
+            console.log("this is database" + database);
             return database
             
         }
         catch{console.log("mamaguevo")}
     }
-    
-    databaseRetrieve();
-}
 
-updateAppState(){
-    const dataArray = this.databaseRetrieve()
+    const dataFromApp =async () => {
+        const dataArray = await databaseRetrieve();
+        if(dataArray!==undefined){
+            dispatch(addInfo(dataArray))
+            const read = appState.array;
+            console.log("appstate is" + read)
+            return read
+        }
+    }
+        
+     dataFromApp().then((taskData)=>{
+        
+        const taskList = this.shadowRoot?.querySelector('.tasks')
+        taskData?.forEach((data:any) => {
+            console.log("porf" + data);
+            const card = this.ownerDocument.createElement('card-element')
+            card.setAttribute(CardAttributes.titleTask,data.title)
+            card.setAttribute(CardAttributes.description,data.description)
+            taskList?.appendChild(card);
+        })
+    })
 }
 
 connectedCallback(){
@@ -56,17 +70,7 @@ async addInfo() {
     }
  }
 
-renderTaskList(){
-    const taskList = this.shadowRoot?.querySelector('.tasks')
-    
-    const taskData = this.taskData
-    taskData?.forEach((data:any) => {
-        const card = this.ownerDocument.createElement('card-element')
-        card.setAttribute(CardAttributes.titleTask,data.title)
-        card.setAttribute(CardAttributes.description,data.description)
-        taskList?.appendChild(card);
-    });
-}
+
 
 render() {
     if (this.shadowRoot) {
@@ -82,8 +86,6 @@ render() {
             </section>
         `;
 
-        this.renderTaskList();
-
         const form = this.shadowRoot.querySelector('.form');
         form?.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -93,7 +95,7 @@ render() {
         button?.addEventListener("click", (event) => {
             event.preventDefault();
             this.addInfo();
-            this.renderTaskList();
+            this.updateAppState();
         });
     }
 }

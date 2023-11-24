@@ -1,12 +1,9 @@
 import { infoActions } from "../types/store"
 
-export const addInfo = (title: string, description: string) => {
+export const addInfo = (payload:any) => {
     return {
       action: infoActions.ADDINFO,
-      payload: {
-        title,
-        description,
-      },
+      payload,
     }
   };
 

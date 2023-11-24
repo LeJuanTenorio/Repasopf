@@ -2,13 +2,7 @@ import { AppState, Observer } from '../types/store';
 import { reducer } from './reducer';
 
 export let appState: AppState = {
-	 array:[
-		{title:"ee",
-		description: "e"},
-
-		{title:"eHE",
-		description: "fee"}
-	 ]
+	array:[]
 };
 
 let observers: Observer[] = [];
